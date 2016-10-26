@@ -3,9 +3,9 @@ import urllib3
 import os
 import logging
 
-log_level = 'DEBUG'
-logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/my_log.log')
 
+log_level = 'DEBUG'
+logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/list-updater.log')
 #[Server]
 server= '192.168.73.114'
 s_folder= 'black_lists'
