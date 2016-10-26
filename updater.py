@@ -1,11 +1,17 @@
+#/usr/bin/python3
+
 __author__ = 'kiro'
 import urllib3
 import os
 import logging
-
+import configparser
 
 log_level = 'DEBUG'
 logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/list-updater.log')
+
+config = configparser.ConfigParser()
+
+
 #[Server]
 server= '192.168.73.114'
 s_folder= 'black_lists'

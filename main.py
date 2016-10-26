@@ -1,3 +1,5 @@
+#/usr/bin/python3
+
 import subprocess
 import urllib3
 import logging
