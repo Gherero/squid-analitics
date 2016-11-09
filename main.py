@@ -1,10 +1,57 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 
 import subprocess
 import urllib3
 import logging
+import time
 
-log_level = 'DEBUG'
-logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/skript-updater.log')
-subprocess.call("/tmp/main.py", shell=True)
+log_file = '/var/log/kalmar/skript_updater.log'
+local_versoin = '/opt/kalmar/version'
+logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = log_file , level = logging.DEBUG)
+
+#[server]
+server = '192.168.73.58'
+
+try:
+    f_log=open(log_file, 'a')
+except:
+    f_log=open(log_file, 'w')
+
+try:
+    ver_file = open(local_versoin, 'r')
+except:
+    ver_file = open(local_versoin, 'w')
+    ver_file.writelines("0\n")
+    ver_file.close()
+    ver_file = open(local_versoin, 'r')
+
+
+http = urllib3.PoolManager()
+
+try:
+    response = http.request('GET','http://'+server+'/main/version')
+    logging.info("version")
+except:
+    logging.fatal("Can't connect to server")
+    exit()
+
+if response.status == 404 :
+    logging.warning("Download version file is failed (File no server not found)")
+else:
+    new_version=int(response.data.decode())
+    local_versoin = int(ver_file.readline())
+    if  new_version > local_versoin :
+        response = http.request('GET','http://'+server+'/main/updater.py')
+        with open("/opt/kalmar/updater.py","w") as f:
+            f.write(response.data.decode())
+        f.close()
+
+        response = http.request('GET', 'http://' + server + '/main/version')
+        with open("/opt/kalmar/version","w") as f:
+            f.write(response.data.decode())
+        f.close()
+
+
+subprocess.call("/opt/kalmar/updater.py", shell=True)
 print ("OK")
+

@@ -13,7 +13,7 @@ config = configparser.ConfigParser()
 
 
 #[Server]
-server= '192.168.73.114'
+server_addr= '192.168.73.114'
 s_folder= 'black_lists'
 s_list = 'porno'
 version_file = 'version'
@@ -30,8 +30,8 @@ except:
     f_log=open(log_folder+log_file,'w')
 
 try:
-    response = http.request('GET', 'http://'+server+'/'+s_folder+'/'+s_list)
-    logging.info("Connect GET http://"+server+'/'+s_folder+'/'+s_list)
+    response = http.request('GET', 'http://' + server_addr + '/' + s_folder + '/' + s_list)
+    logging.info("Connect GET http://" + server_addr + '/' + s_folder + '/' + s_list)
 except:
     logging.error("server not found")
     exit()
