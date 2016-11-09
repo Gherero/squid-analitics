@@ -1,4 +1,4 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 
 __author__ = 'kiro'
 import urllib3
@@ -10,28 +10,27 @@ log_level = 'DEBUG'
 logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/list-updater.log')
 
 config = configparser.ConfigParser()
+config.read("/opt/kalmar/updater.py")
 
-
-#[Server]
-server_addr= '192.168.73.114'
+server_addr= config.get('server','addr')
 s_folder= 'black_lists'
 s_list = 'porno'
 version_file = 'version'
 #[Client]
-c_folder = '/etc/squid3/black_lists/'
-log_folder = '/var/log/squid_updater/'
-log_file = 'update_log.log'
+c_folder = config.get('client','folder')
+#log_folder = '/var/log/squid_updater/'
+log_file = config.get('client','log_file')
 
 http = urllib3.PoolManager()
 
 try:
-    f_log=open(log_folder+log_file,'a')
+    f_log=open(log_file,'a')
 except:
-    f_log=open(log_folder+log_file,'w')
+    f_log=open(log_file,'w')
 
 try:
-    response = http.request('GET', 'http://' + server_addr + '/' + s_folder + '/' + s_list)
-    logging.info("Connect GET http://" + server_addr + '/' + s_folder + '/' + s_list)
+    response = http.request('GET', 'http://' + server_addr + '/black_lists/' + s_list)
+    logging.info("Connect GET http://" + server_addr + '/black_lists/' + s_list)
 except:
     logging.error("server not found")
     exit()
