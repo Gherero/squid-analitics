@@ -12,13 +12,13 @@ logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filena
 #[server]
 server = '192.168.73.58'
 #[Server]
-s_folder= 'black_lists'
-s_list = 'porno'
+#s_folder= 'black_lists'
+#s_list = 'porno'
 version_file = 'version'
 #[Client]
-c_folder = '/etc/squid3/black_lists/'
-log_folder = '/var/log/squid_updater/'
-log_file = 'update_log.log'
+#c_folder = '/etc/squid3/black_lists/'
+#log_folder = '/var/log/squid_updater/'
+log_file = '/var/log/squid_updater/update_log.log'
 
 try:
     f_log=open(log_file, 'a')
