@@ -1,14 +1,11 @@
 #!/usr/bin/python3
 
-
 __author__ = 'kiro'
 import urllib3
 import os
 import logging
 import configparser
 
-log_level = 'DEBUG'
-logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = '/var/log/squid_updater/list-updater.log')
 
 config = configparser.ConfigParser()
 config.read("/opt/kalmar/updater.conf")
@@ -22,12 +19,10 @@ c_folder = config.get('client','folder')
 #log_folder = '/var/log/squid_updater/'
 log_file = config.get('client','log_file')
 
+logging.basicConfig(format = '%(levelname)-8s [%(asctime)s] %(message)s', filename = log_file, level = logging.DEBUG )
+
 http = urllib3.PoolManager()
 
-try:
-    f_log=open(log_file,'a')
-except:
-    f_log=open(log_file,'w')
 for dict in black_lists :
 
     try:
@@ -47,6 +42,6 @@ for dict in black_lists :
         with open(c_folder+dict, 'w') as f:
             f.write(response.data.decode())
         f.close()
-        logging.info('Was updated dict. ', dict)
+        logging.info('Was updated dict. ' + dict)
 os.system("squid3 -k reconfigure")
 exit()
